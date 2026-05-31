@@ -1,30 +1,11 @@
 import os
-
 from dotenv import load_dotenv
 from openai import OpenAI
-
-try:
-    import streamlit as st
-except ImportError:
-    st = None
 
 
 load_dotenv()
 
-
-def get_api_key():
-    if st:
-        try:
-            return st.secrets["OPENAI_API_KEY"]
-        except Exception:
-            pass
-
-    return os.getenv("OPENAI_API_KEY")
-
-
-client = OpenAI(
-    api_key=get_api_key()
-)
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 def call_llm(prompt: str) -> str:
@@ -33,13 +14,13 @@ def call_llm(prompt: str) -> str:
         messages=[
             {
                 "role": "system",
-                "content": "You are a helpful AI assistant."
+                "content": "You are a helpful AI assistant for a multi-agent task runner.",
             },
             {
                 "role": "user",
-                "content": prompt
-            }
-        ]
+                "content": prompt,
+            },
+        ],
     )
 
     return response.choices[0].message.content
